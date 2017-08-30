@@ -29,7 +29,7 @@ class TaskBox extends Component {
 function mapDispatchToProps(dispatch,ownProps){
   return {
     getMyTasks:()=>dispatch(getTasks()),
-    postMyTask:()=>dispatch(postTask())
+    postMyTask:(taskContent)=>dispatch(postTask(taskContent))
   }
 }
 function mapStateToProps(state,ownProps){

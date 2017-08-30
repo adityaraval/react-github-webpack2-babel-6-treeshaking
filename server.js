@@ -19,9 +19,8 @@ app.get('/', function (req, res) {
 
 //post tasks
 app.post('/api/v1/tasks',(req,res)=>{
-  console.log(req.body);
   var task = new Task({
-    text:"taskl ",
+    text:req.body.text,
     completed:false
   });
 

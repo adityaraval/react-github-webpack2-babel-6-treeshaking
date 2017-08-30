@@ -42,5 +42,5 @@ module.exports = {
     ],
     extensions: ['.js', '.json']
   },
-  devtool: false
+  devtool: '#source-map'
 };
