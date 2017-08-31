@@ -32,7 +32,6 @@ constructor(props){
                     </div>
                 </div>
                 <div className="row">
-                    <p>{this.state.newTask.text}</p>
                     <div className="col-md-10 col-md-offset-2 text-right">
                         <input type="submit" value="Save Item" className="btn btn-primary" />
                     </div>

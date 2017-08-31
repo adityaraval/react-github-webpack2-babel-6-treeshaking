@@ -11,7 +11,6 @@ class TaskList extends Component {
   render() {
     return (
         <ul className="list-group">
-            <li className="list-group-item clearfix">Tasks</li>
             {
                 this.props.taskslist.map((t,i)=>{
                     return(
