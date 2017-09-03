@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/dist/index.html'));
+    res.sendFile(path.join(__dirname + '/src/index.html'));
 });
 
 //post tasks
