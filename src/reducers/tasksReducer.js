@@ -25,9 +25,9 @@ export default function(state = initialState, action) {
     }
     case types.UPDATE_TASK:
     {
-      let deletedArray = state.tasks.filter(data => data._id!=action.payload.data.task._id)
-      deletedArray.push(action.payload.data.task);
-      return {tasks:deletedArray,isTasksLoaded:true}
+      let deletedArray = state.tasks.filter(data => data._id!=action.payload.data.task._id) //use !==
+      deletedArray.push(action.payload.data.task); //change variable names
+      return {tasks:deletedArray,isTasksLoaded:true} //merge with existing state instead of doing `isTasksLoaded:true`, add semicolons.
     }
 
     default:
