@@ -9,9 +9,6 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case types.GET_TASKS:
       {
-        console.log('REDUCER CALLED ' + types.GET_TASKS, action.payload.data.tasks);
-        //console.log([action.payload.data.tasks,...state])
-        //return [...action.payload.data.tasks, ...state]
         return Object.assign({}, state, {
             tasks: action.payload.data.tasks,
             isTasksLoaded: true
@@ -19,11 +16,13 @@ export default function(state = initialState, action) {
       }
     case types.POST_TASK:
       {
-        console.log('REDUCER CALLED ' + types.POST_TASK, action.payload.data);
-        console.log([...state, action.payload.data])
-        //return [...state, action.payload.data];
-        return {tasks:[action.payload.data,...state.tasks]}
+        return {tasks:[action.payload.data,...state.tasks],isTasksLoaded:true}
       }
+    case types.DELETE_TASK:
+    {
+      let deletedArray = state.tasks.filter(data => data._id!=action.payload.data.task._id)
+      return {tasks:deletedArray,isTasksLoaded:true}
+    }
 
     default:
       return state;

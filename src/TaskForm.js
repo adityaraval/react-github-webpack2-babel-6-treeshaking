@@ -19,7 +19,6 @@ constructor(props){
  
  handleChange(event){
     this.setState({newTask:{text:event.target.value}});
-    console.log(this.state.newTask.text);
  }
  render() {
     return (

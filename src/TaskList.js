@@ -4,8 +4,9 @@ class TaskList extends Component {
   constructor(props){
       super(props);
   }
-  componentDidMount(){
-      console.log(this.props.taskslist)
+
+  removeTask(id){
+    this.props.deleteTask(id);
   }
 
   render() {
@@ -14,7 +15,10 @@ class TaskList extends Component {
             {
                 this.props.taskslist.map((t,i)=>{
                     return(
-                        <li className="list-group-item clearfix" key={i}>{t.text}</li>
+                        <li className="list-group-item clearfix" key={i}>
+                            {t.text}
+                                <button type="button" className="btn btn-primary btn-xs" onClick={()=>this.removeTask(t._id)}><span className="glyphicon glyphicon-remove"></span>DELETE</button>
+                        </li>
                     )
                 })
             }
