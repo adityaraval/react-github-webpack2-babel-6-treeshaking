@@ -15,10 +15,7 @@ class TaskList extends Component {
             {
                 this.props.taskslist.map((t,i)=>{
                     return(
-                        <li className="list-group-item clearfix" key={i}>
-                            {t.text}
-                                <button type="button" className="btn btn-primary btn-xs" onClick={()=>this.removeTask(t._id)}><span className="glyphicon glyphicon-remove"></span>DELETE</button>
-                        </li>
+                       <TaskItem removeTask = {this.removeTask.bind(this)} key = {i} text={t.text} id={t._id} />
                     )
                 })
             }
