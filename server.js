@@ -42,10 +42,23 @@ app.get('/api/v1/tasks',(req,res)=>{
 
 app.delete('/api/v1/tasks/:id',(req,res)=>{
     var id = req.params.id;
-    console.log(id);
     Task.findByIdAndRemove(id).then((task)=>{
       if(!task){
         res.status(404).send();
+      }
+      res.send({task});
+    }).catch((e)=>{
+      res.status(400).send();
+    });
+});
+
+app.patch('/api/v1/tasks/:id',(req,res)=>{
+    var id = req.params.id;
+    var body = _.pick(req.body,['text']);
+
+    Task.findByIdAndUpdate(id,{$set:body},{new:true}).then((task)=>{
+      if(!task){
+        return res.status(404).send();
       }
       res.send({task});
     }).catch((e)=>{

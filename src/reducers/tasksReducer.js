@@ -23,6 +23,12 @@ export default function(state = initialState, action) {
       let deletedArray = state.tasks.filter(data => data._id!=action.payload.data.task._id)
       return {tasks:deletedArray,isTasksLoaded:true}
     }
+    case types.UPDATE_TASK:
+    {
+      let deletedArray = state.tasks.filter(data => data._id!=action.payload.data.task._id)
+      deletedArray.push(action.payload.data.task);
+      return {tasks:deletedArray,isTasksLoaded:true}
+    }
 
     default:
       return state;

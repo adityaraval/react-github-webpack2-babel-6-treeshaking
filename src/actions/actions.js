@@ -25,6 +25,13 @@ export function deleteTask(id){
     return{type:types.DELETE_TASK,payload:request};
 }
 
+export function updateTask(id,text){
+    let URL = BASE_URL+'/tasks';
+    const request = axios.patch(URL+"/"+id,{text:text});
+    //console.log('Action creator for '+types.DELETE_TASK);
+    return{type:types.UPDATE_TASK,payload:request};
+}
+
 export function loadMyHome(){
     let text = {appName:"TASK APP"}
     //console.log('Action creator for '+types.LOAD_HOME);

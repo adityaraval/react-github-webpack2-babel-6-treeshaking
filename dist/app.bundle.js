@@ -24373,7 +24373,7 @@ var TaskBox = function (_Component) {
           'TaskBox'
         ),
         this.renderLoader(),
-        _react2.default.createElement(_TaskList2.default, { taskslist: this.props.tasks, deleteTask: this.props.deleteMyTask }),
+        _react2.default.createElement(_TaskList2.default, { taskslist: this.props.tasks, deleteTask: this.props.deleteMyTask, updateTask: this.props.updateMyTask }),
         _react2.default.createElement(_TaskForm2.default, { addTask: this.props.postMyTask })
       );
     }
@@ -24392,6 +24392,9 @@ function mapDispatchToProps(dispatch, ownProps) {
     },
     deleteMyTask: function deleteMyTask(taskId) {
       return dispatch((0, _actions.deleteTask)(taskId));
+    },
+    updateMyTask: function updateMyTask(taskId, text) {
+      return dispatch((0, _actions.updateTask)(taskId, text));
     }
 
   };
@@ -25702,6 +25705,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getTasks = getTasks;
 exports.postTask = postTask;
 exports.deleteTask = deleteTask;
+exports.updateTask = updateTask;
 exports.loadMyHome = loadMyHome;
 
 var _axios = __webpack_require__(236);
@@ -25737,6 +25741,13 @@ function deleteTask(id) {
     var request = _axios2.default.delete(URL + "/" + id);
     //console.log('Action creator for '+types.DELETE_TASK);
     return { type: types.DELETE_TASK, payload: request };
+}
+
+function updateTask(id, text) {
+    var URL = BASE_URL + '/tasks';
+    var request = _axios2.default.patch(URL + "/" + id, { text: text });
+    //console.log('Action creator for '+types.DELETE_TASK);
+    return { type: types.UPDATE_TASK, payload: request };
 }
 
 function loadMyHome() {
@@ -26663,6 +26674,11 @@ var TaskList = function (_Component) {
             this.props.deleteTask(id);
         }
     }, {
+        key: 'updateTask',
+        value: function updateTask(id, text) {
+            this.props.updateTask(id, text);
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -26671,7 +26687,7 @@ var TaskList = function (_Component) {
                 'ul',
                 { className: 'list-group' },
                 this.props.taskslist.map(function (t, i) {
-                    return _react2.default.createElement(_TaskItem2.default, { removeTask: _this2.removeTask.bind(_this2), key: i, text: t.text, id: t._id });
+                    return _react2.default.createElement(_TaskItem2.default, { updateTask: _this2.updateTask.bind(_this2), removeTask: _this2.removeTask.bind(_this2), key: i, text: t.text, id: t._id, isEditing: false });
                 })
             );
         }
@@ -26710,29 +26726,85 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TaskItem = function (_Component) {
     _inherits(TaskItem, _Component);
 
-    function TaskItem() {
+    function TaskItem(props) {
         _classCallCheck(this, TaskItem);
 
-        return _possibleConstructorReturn(this, (TaskItem.__proto__ || Object.getPrototypeOf(TaskItem)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (TaskItem.__proto__ || Object.getPrototypeOf(TaskItem)).call(this, props));
+
+        _this.state = { isEditing: _this.props.isEditing, text: _this.props.text };
+        _this.onChangeTask = _this.onChangeTask.bind(_this);
+        return _this;
     }
 
     _createClass(TaskItem, [{
+        key: "renderConditionally",
+        value: function renderConditionally() {
+            if (this.state.isEditing == false) {
+                return this.props.text;
+            } else {
+                return _react2.default.createElement("input", { type: "text", value: this.state.text, onChange: this.onChangeTask });
+            }
+        }
+    }, {
+        key: "editButton",
+        value: function editButton() {
+            this.setState({ isEditing: true, text: this.props.text });
+        }
+    }, {
+        key: "saveButton",
+        value: function saveButton(id) {
+            this.props.updateTask(id, this.state.text);
+            this.setState({ isEditing: false, text: "" });
+        }
+    }, {
+        key: "onChangeTask",
+        value: function onChangeTask(event) {
+            console.log(event.target.value);
+            this.setState({ text: event.target.value });
+        }
+    }, {
+        key: "conditionallyRenderButton",
+        value: function conditionallyRenderButton() {
+            var _this2 = this;
+
+            if (this.state.isEditing) {
+                return _react2.default.createElement(
+                    "button",
+                    { type: "button", className: "btn btn-success btn-xs", onClick: function onClick() {
+                            return _this2.saveButton(_this2.props.id);
+                        } },
+                    _react2.default.createElement("span", { className: "glyphicon glyphicon-save" }),
+                    "SAVE"
+                );
+            } else {
+                return _react2.default.createElement(
+                    "button",
+                    { type: "button", className: "btn btn-primary btn-xs", onClick: function onClick() {
+                            return _this2.editButton();
+                        } },
+                    _react2.default.createElement("span", { className: "glyphicon glyphicon-edit" }),
+                    "EDIT"
+                );
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 "li",
                 { className: "list-group-item clearfix" },
-                this.props.text,
+                this.renderConditionally(),
                 _react2.default.createElement(
                     "button",
-                    { type: "button", className: "btn btn-primary btn-xs", onClick: function onClick() {
-                            return _this2.props.removeTask(_this2.props.id);
+                    { type: "button", className: "btn btn-danger btn-xs", onClick: function onClick() {
+                            return _this3.props.removeTask(_this3.props.id);
                         } },
                     _react2.default.createElement("span", { className: "glyphicon glyphicon-remove" }),
                     "DELETE"
-                )
+                ),
+                this.conditionallyRenderButton()
             );
         }
     }]);
@@ -27764,6 +27836,16 @@ exports.default = function () {
           return data._id != action.payload.data.task._id;
         });
         return { tasks: deletedArray, isTasksLoaded: true };
+      }
+    case types.UPDATE_TASK:
+      {
+        console.log(action.payload.data.task);
+        var _deletedArray = state.tasks.filter(function (data) {
+          return data._id != action.payload.data.task._id;
+        });
+        console.log(_deletedArray);
+        _deletedArray.push(action.payload.data.task);
+        return { tasks: _deletedArray, isTasksLoaded: true };
       }
 
     default:

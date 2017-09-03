@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {getTasks,postTask,deleteTask} from './actions/actions';
+import {getTasks,postTask,deleteTask,updateTask} from './actions/actions';
 import TaskList from './TaskList';
 import TaskForm from './TaskForm';
 var Loader = require('halogen/PulseLoader');
@@ -28,7 +28,7 @@ class TaskBox extends Component {
             {
               this.renderLoader()
             }
-            <TaskList taskslist={this.props.tasks} deleteTask={this.props.deleteMyTask} />
+            <TaskList taskslist={this.props.tasks} deleteTask={this.props.deleteMyTask} updateTask={this.props.updateMyTask} />
             <TaskForm addTask={this.props.postMyTask} />
         </div>
     );
@@ -39,7 +39,8 @@ function mapDispatchToProps(dispatch,ownProps){
   return {
     getMyTasks:()=>dispatch(getTasks()),
     postMyTask:(taskContent)=>dispatch(postTask(taskContent)),
-    deleteMyTask:(taskId)=>dispatch(deleteTask(taskId))
+    deleteMyTask:(taskId)=>dispatch(deleteTask(taskId)),
+    updateMyTask:(taskId,text)=>dispatch(updateTask(taskId,text))
     
   }
 }

@@ -9,13 +9,17 @@ class TaskList extends Component {
     this.props.deleteTask(id);
   }
 
+  updateTask(id,text){
+      this.props.updateTask(id,text);
+  }
+
   render() {
     return (
         <ul className="list-group">
             {
                 this.props.taskslist.map((t,i)=>{
                     return(
-                       <TaskItem removeTask = {this.removeTask.bind(this)} key = {i} text={t.text} id={t._id} />
+                       <TaskItem updateTask= {this.updateTask.bind(this)} removeTask = {this.removeTask.bind(this)} key = {i} text={t.text} id={t._id} isEditing={false}  />
                     )
                 })
             }
