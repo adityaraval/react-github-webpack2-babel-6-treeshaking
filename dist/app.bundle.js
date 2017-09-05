@@ -27839,13 +27839,12 @@ exports.default = function () {
       }
     case types.UPDATE_TASK:
       {
-        console.log(action.payload.data.task);
         var _deletedArray = state.tasks.filter(function (data) {
           return data._id != action.payload.data.task._id;
-        });
-        console.log(_deletedArray);
-        _deletedArray.push(action.payload.data.task);
-        return { tasks: _deletedArray, isTasksLoaded: true };
+        }); //use !==
+        _deletedArray.push(action.payload.data.task); //change variable names
+        return { tasks: _deletedArray, isTasksLoaded: true //merge with existing state instead of doing `isTasksLoaded:true`, add semicolons.
+        };
       }
 
     default:
